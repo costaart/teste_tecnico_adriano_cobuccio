@@ -1,18 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Services\User\CreateUserService;
 use Illuminate\Support\Facades\Auth;
 
-
 class RegisterController extends Controller
 {
+    public function show()
+    {
+        return view('auth.register');
+    }
+
     public function store(RegisterRequest $request, CreateUserService $service)
     {
-        $data = $request->validated();
-        $user = $service->execute($data);
+        $user = $service->execute($request->validated());
 
         Auth::login($user);
 
