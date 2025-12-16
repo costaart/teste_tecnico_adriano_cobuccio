@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Transaction;
 use InvalidArgumentException;
 
+/**
+ * Representa a carteira do usuário.
+*/
 class Wallet extends Model
 {
     protected $fillable = ['user_id', 'balance'];
@@ -21,6 +24,11 @@ class Wallet extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    /**
+     * Realiza um depósito.
+     *
+     * @throws InvalidAmountException
+    */
     public function deposit(float $amount): void
     {
         if ($amount <= 0) {
@@ -29,7 +37,13 @@ class Wallet extends Model
 
         $this->increment('balance', $amount);
     }
-
+    
+    /**
+     * Realiza um saque.
+     *
+     * @throws InvalidAmountException
+     * @throws InsufficientFundsException
+    */
     public function withdraw(float $amount): void
     {
         if ($amount <= 0) {

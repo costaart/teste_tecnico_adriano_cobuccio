@@ -9,11 +9,22 @@ use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Exceptions\Domain\AlreadyReversedException;
 use App\Exceptions\Domain\UnauthorizedReversalException;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Serviço responsável por reverter operações financeiras.
+ *
+ * Regras:
+ * - Apenas o dono da carteira pode solicitar reversão
+ * - Operações já revertidas não podem ser revertidas novamente
+ * - Transferências revertem ambos os lançamentos do group_id
+*/
 class ReversalService
 {
+    /**
+     * @throws AlreadyReversedException
+     * @throws UnauthorizedReversalException
+    */
     public function execute(ReversalDTO $dto): void
     {
         DB::transaction(function () use ($dto) {

@@ -8,6 +8,14 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use App\Enums\TransactionType;
 
+/**
+ * Representa um lançamento financeiro.
+ *
+ * Pode ser:
+ * - Depósito
+ * - Transferência (entrada ou saída)
+ * - Reversão
+ */
 class Transaction extends Model
 {
     use HasFactory;
@@ -56,6 +64,14 @@ class Transaction extends Model
         return $this->type->color();
     }
 
+    /**
+     * Indica se a transação pode ser revertida.
+     *
+     * Regras:
+     * - Apenas transações POSTED
+     * - Depósitos podem ser revertidos
+     * - Apenas quem fez a transferência pode revertê-la
+    */
     public function canBeReverted(): bool
     {
         if ($this->status !== TransactionStatus::POSTED) {
