@@ -33,6 +33,7 @@ class Transaction extends Model
 
     protected $casts = [
         'status' => TransactionStatus::class,
+        'type'   => TransactionType::class,
     ];
 
     public function wallet()
@@ -47,17 +48,29 @@ class Transaction extends Model
 
     public function getTypeLabelAttribute(): string
     {
-        return TransactionType::from($this->type)->label();
+        return $this->type->label();
     }
 
     public function getTypeColorAttribute(): string
     {
-        return TransactionType::from($this->type)->color();
+        return $this->type->color();
     }
 
     public function canBeReverted(): bool
     {
-        return $this->status === TransactionStatus::POSTED
-            && $this->type !== TransactionType::REVERSAL;
+        if ($this->status !== TransactionStatus::POSTED) {
+            return false;
+        }
+
+        if ($this->type === TransactionType::DEPOSIT) {
+            return true;
+        }
+
+        if ($this->type === TransactionType::TRANSFER_OUT && $this->group_id !== null) {
+            return true;
+        }
+
+        return false;
     }
+  
 }

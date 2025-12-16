@@ -24,8 +24,7 @@ class DepositService
                 'status'    => TransactionStatus::POSTED,
             ]);
 
-            $wallet->balance += $amount;
-            $wallet->save();
+            $wallet->deposit($amount);
 
             return $transaction;
         });

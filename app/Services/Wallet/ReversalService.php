@@ -7,25 +7,33 @@ use App\Enums\TransactionType;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Exceptions\Domain\AlreadyReversedException;
+use App\Exceptions\Domain\UnauthorizedReversalException;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ReversalService
 {
-    public function execute(Transaction $transaction): void
+    public function execute(Transaction $transaction, User $destiny): void
     {
-        DB::transaction(function () use ($transaction) {
+        DB::transaction(function () use ($transaction, $destiny) {
+
+            if ($transaction->wallet->user_id !== $destiny->id) {
+                throw new UnauthorizedReversalException();
+            }
 
             if ($transaction->status === TransactionStatus::REVERSED) {
                 throw new AlreadyReversedException();
             }
 
-            // caso seja transferencia
+            if ($transaction->group_id && $transaction->type !== TransactionType::TRANSFER_OUT) {
+                throw new UnauthorizedReversalException();
+            }
+
             if ($transaction->group_id) {
                 $this->reverseTransfer($transaction);
                 return;
             }
 
-            // caso seja deposito
             $this->reverseSingleTransaction($transaction);
         });
     }
@@ -52,12 +60,8 @@ class ReversalService
                 'related_transaction_id'=> $transaction->id,
             ]);
 
-            // ajusta saldo
-            if ($transaction->amount > 0) {
-                $wallet->decrement('balance', $transaction->amount);
-            } else {
-                $wallet->increment('balance', abs($transaction->amount));
-            }
+            // ajusta saldo dps da reversao
+            $this->applyReverseOperation($wallet, $transaction->amount);
 
             $transaction->update(['status' => TransactionStatus::REVERSED]);
         }
@@ -77,12 +81,17 @@ class ReversalService
         ]);
 
         // ajusta saldo dps da reversao
-        if ($transaction->amount > 0) {
-            $wallet->decrement('balance', $transaction->amount);
-        } else {
-            $wallet->increment('balance', abs($transaction->amount));
-        }
+        $this->applyReverseOperation($wallet, $transaction->amount);
 
         $transaction->update(['status' => TransactionStatus::REVERSED]);
+    }
+
+    private function applyReverseOperation(Wallet $wallet, float $amount): void
+    {
+        if ($amount > 0) {
+            $wallet->withdraw($amount);
+        } else {
+            $wallet->deposit(abs($amount));
+        }
     }
 }

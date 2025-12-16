@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Transaction;
 use App\Services\Wallet\ReversalService;
 use App\Exceptions\Domain\AlreadyReversedException;
+use App\Exceptions\Domain\UnauthorizedReversalException;
 use Illuminate\Support\Facades\Auth;
 
 class ReversalController extends Controller
@@ -13,16 +14,12 @@ class ReversalController extends Controller
     {
         try {
             
-            if ($transaction->wallet->user_id !== Auth::id()) {
-                abort(403);
-            }
-
-            $service->execute($transaction);
+            $service->execute($transaction, Auth::user());
 
             return redirect()->route('dashboard')
                 ->with('success', 'Operação revertida com sucesso');
 
-        } catch (AlreadyReversedException $e) {
+        } catch (AlreadyReversedException | UnauthorizedReversalException $e) {
             return redirect()->route('dashboard')
                 ->with('error', $e->getMessage());
         }
