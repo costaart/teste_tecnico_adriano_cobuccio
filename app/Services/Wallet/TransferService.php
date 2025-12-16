@@ -2,6 +2,7 @@
 
 namespace App\Services\Wallet;
 
+use App\Enums\TransactionType;
 use App\Models\User;
 use App\Models\Transaction;
 use App\Exceptions\Domain\InsufficientFundsException;
@@ -30,14 +31,14 @@ class TransferService
 
             Transaction::create([
                 'wallet_id' => $fromWallet->id,
-                'type'      => 'transfer_out',
+                'type'      => TransactionType::TRANSFER_OUT,
                 'amount'    => -$amount,
                 'group_id'  => $groupId,
             ]);
 
             Transaction::create([
                 'wallet_id' => $toWallet->id,
-                'type'      => 'transfer_in',
+                'type'      => TransactionType::TRANSFER_IN,
                 'amount'    => $amount,
                 'group_id'  => $groupId,
             ]);

@@ -2,6 +2,8 @@
 
 namespace App\Services\Wallet;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +19,9 @@ class DepositService
 
             $transaction = Transaction::create([
                 'wallet_id' => $wallet->id,
-                'type'      => 'deposit',
+                'type'      => TransactionType::DEPOSIT,
                 'amount'    => $amount,
-                'status'    => 'posted',
+                'status'    => TransactionStatus::POSTED,
             ]);
 
             $wallet->balance += $amount;

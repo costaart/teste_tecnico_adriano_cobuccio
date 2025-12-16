@@ -2,6 +2,8 @@
 
 namespace App\Services\Wallet;
 
+use App\Enums\TransactionStatus;
+use App\Enums\TransactionType;
 use App\Models\Transaction;
 use App\Models\Wallet;
 use App\Exceptions\Domain\AlreadyReversedException;
@@ -13,7 +15,7 @@ class ReversalService
     {
         DB::transaction(function () use ($transaction) {
 
-            if ($transaction->status === 'reversed') {
+            if ($transaction->status === TransactionStatus::REVERSED) {
                 throw new AlreadyReversedException();
             }
 
@@ -34,7 +36,7 @@ class ReversalService
 
         foreach ($transactions as $transaction) {
 
-            if ($transaction->status === 'reversed') {
+            if ($transaction->status === TransactionStatus::REVERSED) {
                 throw new AlreadyReversedException();
             }
 
@@ -45,7 +47,7 @@ class ReversalService
             // cria transacao de reversao
             Transaction::create([
                 'wallet_id'             => $wallet->id,
-                'type'                  => 'reversal',
+                'type'                  => TransactionType::REVERSAL,
                 'amount'                => -$transaction->amount,
                 'related_transaction_id'=> $transaction->id,
             ]);
@@ -57,7 +59,7 @@ class ReversalService
                 $wallet->increment('balance', abs($transaction->amount));
             }
 
-            $transaction->update(['status' => 'reversed']);
+            $transaction->update(['status' => TransactionStatus::REVERSED]);
         }
     }
 
@@ -69,7 +71,7 @@ class ReversalService
 
         Transaction::create([
             'wallet_id'             => $wallet->id,
-            'type'                  => 'reversal',
+            'type'                  => TransactionType::REVERSAL,
             'amount'                => -$transaction->amount,
             'related_transaction_id'=> $transaction->id,
         ]);
@@ -81,6 +83,6 @@ class ReversalService
             $wallet->increment('balance', abs($transaction->amount));
         }
 
-        $transaction->update(['status' => 'reversed']);
+        $transaction->update(['status' => TransactionStatus::REVERSED]);
     }
 }

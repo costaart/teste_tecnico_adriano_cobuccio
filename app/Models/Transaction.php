@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Models;
+
+use App\Enums\TransactionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
@@ -29,6 +31,10 @@ class Transaction extends Model
         });
     }
 
+    protected $casts = [
+        'status' => TransactionStatus::class,
+    ];
+
     public function wallet()
     {
         return $this->belongsTo(Wallet::class);
@@ -51,9 +57,7 @@ class Transaction extends Model
 
     public function canBeReverted(): bool
     {
-        return $this->status === 'posted'
-            && $this->type !== 'reversal';
+        return $this->status === TransactionStatus::POSTED
+            && $this->type !== TransactionType::REVERSAL;
     }
-
-
 }
