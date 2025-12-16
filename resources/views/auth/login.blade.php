@@ -19,22 +19,27 @@
 
     <div>
         <label class="text-xs font-bold">E-mail</label>
-        <input name="email" value="{{ old('email') }}"
-               class="input" placeholder="seu@email.com">
+        <input name="email" value="{{ old('email') }}" class="input" placeholder="seu@email.com">
+        @error('email')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
     </div>
 
     <div>
         <label class="text-xs font-bold">Senha</label>
         <input type="password" name="password" class="input">
+        @error('password')
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+        @enderror
     </div>
 
-    @if(session('error'))
-        <p class="text-red-500 text-sm">{{ session('error') }}</p>
+    @if (session('error'))
+        <p class="text-red-500 text-sm">
+            {{ session('error') }}
+        </p>
     @endif
 
-    <button class="w-full bg-green-500 text-white py-2 rounded-md">
-        Entrar →
-    </button>
+    <button class="w-full bg-green-500 text-white py-2 rounded-md"> Entrar → </button>
 </form>
 
 @endsection
