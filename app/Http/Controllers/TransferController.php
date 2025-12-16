@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\Domain\CannotTransferToSelfException;
+use App\Exceptions\Domain\InsufficientFundsException;
+use App\Exceptions\Domain\InvalidAmountException;
 use App\Http\Requests\TransferRequest;
 use App\Services\Wallet\TransferService;
 use App\Models\User;
@@ -19,9 +22,12 @@ class TransferController extends Controller
             return redirect()->route('dashboard')
                 ->with('success', 'Transferência realizada com sucesso!');
 
-        } catch (\DomainException $e) {
+        } catch (InvalidAmountException | InsufficientFundsException $e) {
             return redirect()->route('transfer.show')
-            ->with('error', $e->getMessage());
+                ->withInput()
+                ->withErrors(['amount' => $e->getMessage()]);
+        } catch (CannotTransferToSelfException $e) {
+            return redirect()->route('transfer.show')->with('error', $e->getMessage());
         }
     }
 

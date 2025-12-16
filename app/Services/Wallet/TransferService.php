@@ -3,9 +3,9 @@
 namespace App\Services\Wallet;
 
 use App\Enums\TransactionType;
+use App\Exceptions\Domain\CannotTransferToSelfException;
 use App\Models\User;
 use App\Models\Transaction;
-use App\Exceptions\Domain\InsufficientFundsException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -16,17 +16,12 @@ class TransferService
         DB::transaction(function () use ($from, $to, $amount) {
 
             if ($from->id === $to->id) {
-                throw new \DomainException('Não é possível transferir para si mesmo.');
+                throw new CannotTransferToSelfException();
             }
 
             // evita concorrencia (dnv)
-            $fromWallet = $from->wallet()->lockForUpdate()->first();
-            $toWallet = $to->wallet()->lockForUpdate()->first();
-
-            if ($fromWallet->balance < $amount) {
-                throw new InsufficientFundsException();
-            }
-
+            $fromWallet = $from->wallet()->lockForUpdate()->firstOrFail();
+            $toWallet = $to->wallet()->lockForUpdate()->firstOrFail();
             $groupId = Str::uuid();
 
             Transaction::create([
@@ -43,8 +38,8 @@ class TransferService
                 'group_id'  => $groupId,
             ]);
 
-            $fromWallet->decrement('balance', $amount);
-            $toWallet->increment('balance', $amount);
+            $fromWallet->withdraw($amount);
+            $toWallet->deposit($amount);
         });
     }
 }
