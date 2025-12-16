@@ -2,7 +2,7 @@
 
 namespace App\Services\Wallet;
 
-use App\DTOs\Wallet\ReversalDTO;
+use App\DTO\Wallet\ReversalDTO;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Transaction;

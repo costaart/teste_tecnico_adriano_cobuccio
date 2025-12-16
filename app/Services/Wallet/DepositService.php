@@ -2,7 +2,7 @@
 
 namespace App\Services\Wallet;
 
-use App\DTOs\Wallet\DepositDTO;
+use App\DTO\Wallet\DepositDTO;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\User;

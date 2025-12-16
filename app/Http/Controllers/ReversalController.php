@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Wallet\ReversalDTO;
+use App\DTO\Wallet\ReversalDTO;
 use App\Models\Transaction;
 use App\Services\Wallet\ReversalService;
 use App\Exceptions\Domain\AlreadyReversedException;

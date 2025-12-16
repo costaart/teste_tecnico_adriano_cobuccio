@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Wallet\TransferDTO;
+use App\DTO\Wallet\TransferDTO;
 use App\Exceptions\Domain\CannotTransferToSelfException;
 use App\Exceptions\Domain\InsufficientFundsException;
 use App\Exceptions\Domain\InvalidAmountException;

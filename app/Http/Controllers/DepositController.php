@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Wallet\DepositDTO;
+use App\DTO\Wallet\DepositDTO;
 use App\Http\Requests\DepositRequest;
 use App\Services\Wallet\DepositService;
 use Illuminate\Http\Request;

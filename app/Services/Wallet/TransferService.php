@@ -2,7 +2,7 @@
 
 namespace App\Services\Wallet;
 
-use App\DTOs\Wallet\TransferDTO;
+use App\DTO\Wallet\TransferDTO;
 use App\Enums\TransactionType;
 use App\Exceptions\Domain\CannotTransferToSelfException;
 use App\Models\User;

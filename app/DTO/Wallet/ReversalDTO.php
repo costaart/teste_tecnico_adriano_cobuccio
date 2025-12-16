@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs\Wallet;
+namespace App\DTO\Wallet;
 
 use App\Models\User;
 use App\Models\Transaction;
