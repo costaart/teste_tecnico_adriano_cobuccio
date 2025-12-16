@@ -16,10 +16,16 @@ class TransferController extends Controller
                 $request->amount
             );
 
-            return back()->with('success', 'Transferência realizada com sucesso');
+            return redirect()->route('dashboard')
+            ->with('success', 'Transferência realizada com sucesso!');
 
         } catch (\DomainException $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function show()
+    {
+        return view('wallet.transfer');
     }
 }

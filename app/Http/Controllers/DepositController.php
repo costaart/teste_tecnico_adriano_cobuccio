@@ -12,7 +12,13 @@ class DepositController extends Controller
     public function store(DepositRequest $request, DepositService $service) {
         $service->execute(Auth::user(), $request->amount);
 
-        return back()->with('success', 'Depósito realizado com sucesso!');
-        
+        return redirect()->route('dashboard')
+            ->with('success', 'Depósito realizado com sucesso!');
     }
+
+    public function show()
+    {
+        return view('wallet.deposit');
+    }    
+
 }
