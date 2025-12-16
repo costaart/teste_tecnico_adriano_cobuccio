@@ -13,7 +13,7 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    // usar request
+    // usar request > alterar aqui
     public function store(Request $request)
     {
         $credentials = $request->validate([
