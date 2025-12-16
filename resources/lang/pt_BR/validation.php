@@ -9,7 +9,7 @@ return [
     ],
     'confirmed' => 'A confirmação de :attribute não confere.',
     'unique'    => 'Este :attribute já está em uso.',
-
+    'exists' => 'Nenhum usuário foi encontrado com esse e-mail.',
     'attributes' => [
         'name'                  => 'nome',
         'email'                 => 'email',

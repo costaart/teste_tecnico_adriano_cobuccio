@@ -11,16 +11,17 @@ class TransferController extends Controller
 {
     public function store(TransferRequest $request, TransferService $service) {
         try {
-            $service->execute(Auth::user(),
-                User::findOrFail($request->to_user_id),
-                $request->amount
-            );
+            
+            $toUser = User::where('email', $request->email)->firstOrFail();
+
+            $service->execute(Auth::user(), $toUser, $request->amount);
 
             return redirect()->route('dashboard')
-            ->with('success', 'Transferência realizada com sucesso!');
+                ->with('success', 'Transferência realizada com sucesso!');
 
         } catch (\DomainException $e) {
-            return back()->with('error', $e->getMessage());
+            return redirect()->route('transfer.show')
+            ->with('error', $e->getMessage());
         }
     }
 

@@ -22,15 +22,8 @@ class TransferRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'to_user_id' => [
-                'required',
-                'exists:users,id',
-            ],
-            'amount' => [
-                'required',
-                'numeric',
-                'min:0.01',
-            ],
+            'email'  => ['required', 'email', 'exists:users,email'],
+            'amount' => ['required', 'numeric', 'min:0.01'],
         ];
     }
 }

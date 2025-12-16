@@ -28,8 +28,7 @@
             <input name="amount" type="number" step="0.01" placeholder="R$ 0,00" class="input" value="{{ old('amount') }}" />
 
             <p class="text-xs text-gray-400 mt-1">
-                Saldo disponível:
-                R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}
+                Saldo disponível: R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}
             </p>
 
             @error('amount')
@@ -39,7 +38,7 @@
 
         <button type="submit" class="w-full bg-green-500 text-white py-3 rounded-lg font-medium hover:bg-green-600">
             Confirmar transferência
-        </button>
+        </button>   
     </form>
 </div>
 
