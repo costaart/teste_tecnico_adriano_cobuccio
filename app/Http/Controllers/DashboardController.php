@@ -14,7 +14,7 @@ class DashboardController extends Controller
 
         $transactions = $wallet->transactions()
             ->latest()
-            ->get();
+            ->simplePaginate(4);
 
         return view('dashboard', [
             'user' => $user,

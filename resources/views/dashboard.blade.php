@@ -53,6 +53,16 @@
             @empty
                 <p class="text-sm text-gray-500">Nenhuma movimentação ainda.</p>
             @endforelse
+
+            @if ($transactions->hasPages())
+                <div class="mt-6 flex flex-col items-center gap-2">
+                    {{ $transactions->links() }}
+                    <p class="text-sm text-gray-500">
+                        Mostrando {{ $transactions->firstItem() }} a {{ $transactions->lastItem() }} resultados
+                    </p>
+                </div>
+            @endif
+
         </div>
     </div>
 
