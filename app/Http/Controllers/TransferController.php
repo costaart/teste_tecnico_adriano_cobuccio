@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\Wallet\TransferDTO;
 use App\Exceptions\Domain\CannotTransferToSelfException;
 use App\Exceptions\Domain\InsufficientFundsException;
 use App\Exceptions\Domain\InvalidAmountException;
@@ -17,7 +18,13 @@ class TransferController extends Controller
             
             $toUser = User::where('email', $request->email)->firstOrFail();
 
-            $service->execute(Auth::user(), $toUser, $request->amount);
+            $dto = new TransferDTO(
+                from: Auth::user(),
+                to: $toUser,
+                amount: $request->amount
+            );
+
+            $service->execute($dto);
 
             return redirect()->route('dashboard')
                 ->with('success', 'Transferência realizada com sucesso!');

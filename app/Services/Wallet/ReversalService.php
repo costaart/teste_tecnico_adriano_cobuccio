@@ -2,6 +2,7 @@
 
 namespace App\Services\Wallet;
 
+use App\DTOs\Wallet\ReversalDTO;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\Transaction;
@@ -13,11 +14,14 @@ use Illuminate\Support\Facades\DB;
 
 class ReversalService
 {
-    public function execute(Transaction $transaction, User $destiny): void
+    public function execute(ReversalDTO $dto): void
     {
-        DB::transaction(function () use ($transaction, $destiny) {
+        DB::transaction(function () use ($dto) {
 
-            if ($transaction->wallet->user_id !== $destiny->id) {
+            $transaction = $dto->transaction;
+            $actor = $dto->actor;
+
+            if ($transaction->wallet->user_id !== $actor->id) {
                 throw new UnauthorizedReversalException();
             }
 

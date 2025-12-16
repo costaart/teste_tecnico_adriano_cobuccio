@@ -2,6 +2,7 @@
 
 namespace App\Services\Wallet;
 
+use App\DTOs\Wallet\DepositDTO;
 use App\Enums\TransactionStatus;
 use App\Enums\TransactionType;
 use App\Models\User;
@@ -10,21 +11,21 @@ use Illuminate\Support\Facades\DB;
 
 class DepositService
 {
-    public function execute(User $user, float $amount): Transaction
+    public function execute(DepositDTO $dto): Transaction
     {
-        return DB::transaction(function () use ($user, $amount) {
+        return DB::transaction(function () use ($dto) {
 
             // concorrencia
-            $wallet = $user->wallet()->lockForUpdate()->first();
+            $wallet = $dto->user->wallet()->lockForUpdate()->first();
 
             $transaction = Transaction::create([
                 'wallet_id' => $wallet->id,
                 'type'      => TransactionType::DEPOSIT,
-                'amount'    => $amount,
+                'amount'    => $dto->amount,
                 'status'    => TransactionStatus::POSTED,
             ]);
 
-            $wallet->deposit($amount);
+            $wallet->deposit($dto->amount);
 
             return $transaction;
         });

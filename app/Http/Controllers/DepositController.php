@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\Wallet\DepositDTO;
 use App\Http\Requests\DepositRequest;
 use App\Services\Wallet\DepositService;
 use Illuminate\Http\Request;
@@ -10,7 +11,13 @@ use Illuminate\Support\Facades\Auth;
 class DepositController extends Controller
 {
     public function store(DepositRequest $request, DepositService $service) {
-        $service->execute(Auth::user(), $request->amount);
+
+        $dto = new DepositDTO(
+            user: Auth::user(),
+            amount: $request->amount
+        );
+
+        $service->execute($dto);
 
         return redirect()->route('dashboard')
             ->with('success', 'Depósito realizado com sucesso!');
