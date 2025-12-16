@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\ReversalController;
 use App\Http\Controllers\TransferController;
 
 Route::get('/', function () {
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     
     Route::get('/transfer', [TransferController::class, 'show'])->name('transfer.show');
     Route::post('/transfer', [TransferController::class, 'store'])->name('transfer.store');
+
+    Route::post('/transactions/{transaction}/revert', [ReversalController::class, 'store'])->name('transactions.revert');
     
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

@@ -36,20 +36,32 @@
         <div class="space-y-3">
             @forelse($transactions as $transaction)
                 <div class="bg-white rounded-lg p-4 flex justify-between items-center border-2">
-                    <div>
-                        <p class="{{ $transaction->type_color }} font-bold">
-                            {{ $transaction->type_label }}
-                        </p>
-                        <p class="text-sm text-gray-500">
-                            {{ $transaction->created_at->format('d/m/Y H:i') }}
-                        </p>
-                    </div>
+                <div>
+                    <p class="{{ $transaction->type_color }} font-bold">
+                        {{ $transaction->type_label }}
+                    </p>
+                    <p class="text-sm text-gray-500">
+                        {{ $transaction->created_at->format('d/m/Y H:i') }}
+                    </p>
+                </div>
 
-                    <p class="{{ $transaction->amount >= 0 ? 'text-green-600' : 'text-red-500' }}">
+                <div class="flex items-center gap-3">
+                    <p class="{{ $transaction->type_color }}">
                         {{ $transaction->amount >= 0 ? '+' : '-' }}
                         R$ {{ number_format(abs($transaction->amount), 2, ',', '.') }}
                     </p>
+
+                    @if ($transaction->canBeReverted())
+                        <form method="POST" action="{{ route('transactions.revert', $transaction) }}" onsubmit="return confirm('Deseja realmente reverter esta operação?')">
+                            @csrf
+                            <button type="submit" class="text-xs text-gray-400 hover:text-red-500" title="Reverter operação">
+                                Reverter
+                            </button>
+                        </form>
+                    @endif
                 </div>
+            </div>
+
             @empty
                 <p class="text-sm text-gray-500">Nenhuma movimentação ainda.</p>
             @endforelse

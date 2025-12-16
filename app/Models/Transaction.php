@@ -49,5 +49,11 @@ class Transaction extends Model
         return TransactionType::from($this->type)->color();
     }
 
+    public function canBeReverted(): bool
+    {
+        return $this->status === 'posted'
+            && $this->type !== 'reversal';
+    }
+
 
 }
