@@ -3,8 +3,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Str;
-
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\TransactionType;
 
 class Transaction extends Model
 {
@@ -37,6 +37,16 @@ class Transaction extends Model
     public function relatedTransaction()
     {
         return $this->belongsTo(Transaction::class, 'related_transaction_id');
+    }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return TransactionType::from($this->type)->label();
+    }
+
+    public function getTypeColorAttribute(): string
+    {
+        return TransactionType::from($this->type)->color();
     }
 
 

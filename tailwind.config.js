@@ -12,5 +12,11 @@ export default {
       },
     },
   },
+  safelist: [
+    'text-green-600',
+    'text-blue-600',
+    'text-red-500',
+    'text-orange-500',
+  ],
   plugins: [],
 }
