@@ -1,5 +1,6 @@
 <?php
 
+use App\DTO\Wallet\TransferDTO;
 use App\Models\User;
 use App\Services\Wallet\TransferService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -16,7 +17,13 @@ it('transfers money between users', function () {
 
     $service = app(TransferService::class);
 
-    $service->execute($from, $to, 40);
+    $dto = new TransferDTO(
+        from: $from,
+        to: $to,
+        amount: 40
+    );
+
+    $service->execute($dto);
 
     expect($from->wallet->fresh()->balance)->toBe(60);
     expect($to->wallet->fresh()->balance)->toBe(40);
@@ -32,7 +39,13 @@ it('throws exception when balance is insufficient', function () {
 
     $service = app(TransferService::class);
 
+    $dto = new TransferDTO(
+        from: $from,
+        to: $to,
+        amount: 50
+    );
+
     $this->expectException(InsufficientFundsException::class);
 
-    $service->execute($from, $to, 50);
+    $service->execute($dto);
 });
