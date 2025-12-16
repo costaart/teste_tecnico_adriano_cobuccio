@@ -14,24 +14,23 @@ Route::get('/', function () {
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'show'])->name('login');
-    Route::post('/login', [LoginController::class, 'store']);
+    Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:5,1');
 
     Route::get('/register', [RegisterController::class, 'show'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store']);
+    Route::post('/register', [RegisterController::class, 'store'])->middleware('throttle:3,1');
 });
 
 // rotas autenticadas
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard');
     
-    
     Route::get('/deposit', [DepositController::class, 'show'])->name('deposit.show');
-    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store');
+    Route::post('/deposit', [DepositController::class, 'store'])->name('deposit.store')->middleware('throttle:10,1');
     
     Route::get('/transfer', [TransferController::class, 'show'])->name('transfer.show');
-    Route::post('/transfer', [TransferController::class, 'store'])->name('transfer.store');
+    Route::post('/transfer', [TransferController::class, 'store'])->name('transfer.store')->middleware('throttle:5,1');
 
-    Route::post('/transactions/{transaction}/revert', [ReversalController::class, 'store'])->name('transactions.revert');
+    Route::post('/transactions/{transaction}/revert', [ReversalController::class, 'store'])->name('transactions.revert')->middleware('throttle:5,1');
     
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

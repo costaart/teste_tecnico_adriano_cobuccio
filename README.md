@@ -28,6 +28,8 @@ Aplicação web desenvolvida em **Laravel** que simula uma **carteira financeira
 | POST | `/register` | Criação de usuário |
 | POST | `/logout` | Logout |
 
+Essas rotas possuem rate limit configurado para evitar ataques de força bruta e spam de cadastros.
+
 ### Dashboard
 | Método | Rota | Descrição |
 |------|------|-----------|
@@ -41,6 +43,8 @@ Aplicação web desenvolvida em **Laravel** que simula uma **carteira financeira
 | GET | `/transfer` | Tela de transferência |
 | POST | `/transfer` | Realizar transferência |
 | POST | `/transactions/{transaction}/revert` | Reverter operação |
+
+Essas rotas também estão utilizando rate limiting para evitar requisições repetidas em curto intervalo de tempo.
 
 ---
 
