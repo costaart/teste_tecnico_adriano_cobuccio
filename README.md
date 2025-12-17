@@ -1,10 +1,10 @@
-# 💰 Teste Técnico: Desenvolvedor Full Stack - Grupo Adriano Cobuccio
+# Teste Técnico: Desenvolvedor Full Stack - Grupo Adriano Cobuccio
 
 Aplicação web desenvolvida em **Laravel** que simula uma **carteira financeira**, permitindo que usuários realizem **depósitos, transferências e reversões**, respeitando regras de negócio e segurança.
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - Cadastro e autenticação de usuários
 - Cada usuário possui uma carteira
@@ -17,7 +17,7 @@ Aplicação web desenvolvida em **Laravel** que simula uma **carteira financeira
 
 ---
 
-## 🛣️ Rotas do Sistema
+## Rotas do Sistema
 
 ### Autenticação
 | Método | Rota | Descrição |
@@ -48,7 +48,7 @@ Essas rotas também estão utilizando rate limiting para evitar requisições re
 
 ---
 
-## 📜 Regras de Negócio
+## Regras de Negócio
 
 ### Wallet (Carteira)
 - Cada usuário possui exatamente **uma carteira**
@@ -79,7 +79,7 @@ Essas rotas também estão utilizando rate limiting para evitar requisições re
 
 ---
 
-## 🧠 Arquitetura e Decisões Técnicas
+## Arquitetura e Decisões Técnicas
 
 ### Separação de Responsabilidades
 - **Controller**: responsável apenas por HTTP, validação e resposta
@@ -102,7 +102,7 @@ Exemplos de Requests:
 
 ---
 
-## 🧪 Testes
+## Testes
 
 O projeto utiliza **Pest** para testes automatizados.
 
@@ -118,7 +118,7 @@ Os testes validam diretamente os **Services**, garantindo integridade do domíni
 
 ---
 
-## 🎨 Interface (UI)
+## Interface
 
 A interface foi construída com **Tailwind CSS**, priorizando simplicidade e clareza.
 
@@ -129,7 +129,7 @@ A interface foi construída com **Tailwind CSS**, priorizando simplicidade e cla
 - Depósito
 - Transferência
 
-### 🖼️ Imagens do Sistema
+### Imagens do Sistema
 
 #### Cadastro
 ![Cadastro](docs/images/register.png)
@@ -148,7 +148,7 @@ A interface foi construída com **Tailwind CSS**, priorizando simplicidade e cla
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - **Laravel** — Framework backend
 - **PHP 8+**
@@ -159,7 +159,7 @@ A interface foi construída com **Tailwind CSS**, priorizando simplicidade e cla
 
 ---
 
-## ▶️ Como executar o projeto
+## Como executar o projeto
 
 ```bash
 git clone <repositorio>
