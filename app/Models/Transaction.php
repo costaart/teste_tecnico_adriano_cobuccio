@@ -71,6 +71,7 @@ class Transaction extends Model
      * - Apenas transações POSTED
      * - Depósitos podem ser revertidos
      * - Apenas quem fez a transferência pode revertê-la
+     * - Somente operações que não negativem a carteira podem ser feitas
     */
     public function canBeReverted(): bool
     {
@@ -78,15 +79,16 @@ class Transaction extends Model
             return false;
         }
 
-        if ($this->type === TransactionType::DEPOSIT) {
-            return true;
-        }
+        $wallet = $this->wallet;
 
-        if ($this->type === TransactionType::TRANSFER_OUT && $this->group_id !== null) {
-            return true;
-        }
+        return match ($this->type) {
+            TransactionType::DEPOSIT =>
+                $wallet->balance >= $this->amount,
 
-        return false;
+            TransactionType::TRANSFER_OUT =>
+                $wallet->balance >= abs($this->amount),
+
+            default => false,
+        };
     }
-  
 }
