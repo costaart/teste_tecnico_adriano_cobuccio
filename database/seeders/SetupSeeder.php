@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\DTO\Wallet\DepositDTO;
+use App\DTO\Wallet\TransferDTO;
 use App\Services\User\CreateUserService;
 use App\Services\Wallet\DepositService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -32,7 +34,18 @@ class SetupSeeder extends Seeder
             'password' => '123456',
         ]);
 
-        $depositService->execute($joao, 50);
-        $transferService->execute($joao, $maria, 20);
+        $depositDTO = new DepositDTO(
+            user: $joao,
+            amount: 50
+        );
+
+        $transferDTO = new TransferDTO(
+            from: $joao,
+            to: $maria,
+            amount: 20
+        );
+
+        $depositService->execute($depositDTO);
+        $transferService->execute($transferDTO);
     }
 }

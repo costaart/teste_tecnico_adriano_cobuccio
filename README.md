@@ -163,10 +163,12 @@ A interface foi construída com **Tailwind CSS**, priorizando simplicidade e cla
 
 ```bash
 git clone <repositorio>
-cd appfinanceiro
 cp .env.example .env
 docker compose up -d
 composer install
+docker compose exec app bash
 php artisan key:generate
 php artisan migrate
-php artisan db:seed
+php artisan db:seed --class=SetupSeeder
+npm install
+npm run dev
